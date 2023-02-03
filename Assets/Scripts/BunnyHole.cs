@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace SuperBunnyJam
 {
-    public class BunnyHole : GrabbableEvents
+    public class BunnyHole : MonoBehaviour
     {
         [Header("Bunny Components")]
         [SerializeField]
@@ -17,6 +17,8 @@ namespace SuperBunnyJam
         private float _spawnDelay = 1.0f;
         private float _tempDealy = 0.0f;
 
+        private bool _isSpawnable = true;
+
         private void Start()
         {
             _tempDealy = _spawnDelay;
@@ -28,9 +30,15 @@ namespace SuperBunnyJam
             SpawnBunny();
         }
 
+        private void OnTriggerExit(Collider other)
+        {
+            _isSpawnable = other.CompareTag("Bunny");
+            
+        }
+
         private void SpawnBunny()
         {
-            if (_bunnyClone == null)
+            if (_isSpawnable)
             {
                 _tempDealy -= Time.deltaTime;
 
@@ -38,14 +46,9 @@ namespace SuperBunnyJam
                 {
                     _bunnyClone = Instantiate(_bunnyPrefab, transform.position + new Vector3(0, _heightOffset, 0), Quaternion.identity);
                     _tempDealy = _spawnDelay;
+                    _isSpawnable = false;
                 }
             }
-        }
-
-        public override void OnGrab(Grabber grabber)
-        {
-            base.OnGrab(grabber);
-            _bunnyClone = null;
         }
     }
 }

@@ -6,7 +6,7 @@ using BNG;
 
 namespace SuperBunnyJam
 {
-    public class Bunny : MonoBehaviour
+    public class Bunny : GrabbableEvents
     {
         [SerializeField]
         MMF_Player _bunnySpawnFeedback;
@@ -14,14 +14,26 @@ namespace SuperBunnyJam
         Rigidbody _bunnyRB;
         [SerializeField]
         BoxCollider _bunnyCollider;
+        [SerializeField]
+        float _bunnyForceMoltiplir;
 
         private void Start()
         {
-            _bunnyCollider.enabled = false;
-            _bunnyRB.useGravity = false;
             _bunnyRB.isKinematic = true;
             _bunnySpawnFeedback?.PlayFeedbacks();
         }
+
+        public override void OnGrab(Grabber grabber)
+        {
+            base.OnGrab(grabber);
+            _bunnyRB.isKinematic = false;
+        }
+
+        public override void OnRelease()
+        {
+            base.OnRelease();
+        }
+
     }
 
 }
