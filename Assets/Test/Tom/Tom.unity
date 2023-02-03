@@ -772,6 +772,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dryAttractor: {fileID: 541798569}
   wetAttractor: {fileID: 0}
+  addedDestructionRadius: 0.2
   <baseBranchProbability>k__BackingField: 0.6
   <baseCollisionForceRequiredToBreak>k__BackingField: 0
   <baseGrowthRate>k__BackingField: 0.6
@@ -786,7 +787,13 @@ MonoBehaviour:
   - {fileID: 2100000, guid: be62b877b4c601c4daef86f8acdfd039, type: 2}
   - {fileID: 2100000, guid: 257fc2a773659194b9b41188a86ec771, type: 2}
   - {fileID: 2100000, guid: 05b79581f4090ff4aa6ef063adbf50b3, type: 2}
+  rootCorpseColors:
+  - {fileID: 2100000, guid: be62b877b4c601c4daef86f8acdfd039, type: 2}
+  - {fileID: 2100000, guid: 257fc2a773659194b9b41188a86ec771, type: 2}
+  - {fileID: 2100000, guid: 05b79581f4090ff4aa6ef063adbf50b3, type: 2}
   rootContainer: {fileID: 442234939}
+  rootCorpsePrefab: {fileID: 9205473144247534312, guid: 5c14520ff0e7043438f83d2b8a60eb59,
+    type: 3}
   rootPrefab: {fileID: 1684638936250987369, guid: e6dec2e1396ad68438a20de1b2c20408,
     type: 3}
   rootTransverseSize:

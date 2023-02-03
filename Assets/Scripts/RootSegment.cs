@@ -113,6 +113,22 @@ namespace SuperBunnyJam {
             return false;
         }
 
+        MeshRenderer CreateCorpse(float severancePoint) {
+            var result = Instantiate(RootManager.instance.rootCorpsePrefab);
+
+            var epsilon = 0.1f;
+
+            var size = collider.size;
+            size.z = length - severancePoint - epsilon;
+
+            result.transform.localScale = size;
+            result.transform.localPosition = transform.position + transform.forward * (severancePoint + epsilon);
+
+            result.sharedMaterial = RootManager.instance.rootCorpseColors[color];
+
+            return result;
+        }
+
         void DestroySuccessors() {
             foreach (var s in successors)
                 if (s != null)
@@ -197,7 +213,7 @@ namespace SuperBunnyJam {
             }
 
             visualization.sharedMaterial = isWet ? RootManager.instance.wetRootColors[color] : RootManager.instance.rootColors[color];
-        }        
+        }                
 
         /// <summary>Width and height</summary>
         public Vector2 transverseSize {
@@ -262,7 +278,8 @@ namespace SuperBunnyJam {
             // Break root
             if (breakPosition == null) {
                 // Completely
-                Die();
+                CreateCorpse(0f);
+                Die();                
 
                 return;
             }
@@ -294,7 +311,8 @@ namespace SuperBunnyJam {
                 }
 
                 // Sever
-                length = distance;
+                CreateCorpse(distance);
+                length = distance;                
             }
         }
 
