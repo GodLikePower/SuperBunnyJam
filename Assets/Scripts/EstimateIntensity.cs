@@ -33,8 +33,6 @@ namespace SuperBunnyJam {
             rootsByIntensity = new Dictionary<RootSegment, float>();
 
             InvokeRepeating("RefreshIntensity", 1f, 1f);
-
-            FindObjectOfType<FMODUnity.StudioEventEmitter>().SetParameter("Intensity", 80f, true);
         }
 
         public void OnRootDoneGrowing(RootSegment root) {
@@ -44,13 +42,13 @@ namespace SuperBunnyJam {
 
             var i = 0;
             for (; i < intensityBrackets.Length; ++i)
-                if (distance <= intensityBrackets[i].distance)
+                if (distance <= intensityBrackets[i].distance) {
                     // Bracket found
+                    rootsByIntensity[root] = intensityBrackets[i].intensity;
+
                     break;
-
-            rootsByIntensity[root] = intensityBrackets[i].intensity;
+                }                        
         }
-
 
         public void OnRootDead(RootSegment root) {
             rootsByIntensity.Remove(root);            
@@ -59,9 +57,11 @@ namespace SuperBunnyJam {
         public void RefreshIntensity() {
             Profiler.BeginSample("RefreshIntensity");
 
-            var intensity = Mathf.Min(maxIntensity, rootsByIntensity.Values.Sum());
+            var intensity = Mathf.Min(maxIntensity, rootsByIntensity.Values.Sum()) / maxIntensity;
 
             studioEventEmitter.SetParameter("Intensity", intensity * 100f);
+
+            //Debug.Log($"Threats: {string.Join(", ", rootsByIntensity.GroupBy(p => p.Value).Select(g => g.Count()))}, intensity {intensity * 100f}");
 
             Profiler.EndSample();
         }

@@ -137,6 +137,7 @@ namespace SuperBunnyJam {
 
         void Die() {
             RootManager.instance.OnDie(this);
+            EstimateIntensity.instance.OnRootDead(this);
 
             Destroy(gameObject);
 
@@ -339,6 +340,9 @@ namespace SuperBunnyJam {
                 // We're good to grow
                 length += rate;
                 length = Mathf.Min(length, targetLength);
+
+                if (length >= targetLength)
+                    EstimateIntensity.instance.OnRootDoneGrowing(this);
                 
                 return;
             }
