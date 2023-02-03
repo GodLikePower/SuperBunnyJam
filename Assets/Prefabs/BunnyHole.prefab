@@ -49,6 +49,9 @@ MonoBehaviour:
     type: 3}
   _heightOffset: 0
   _spawnDelay: 1
+  _bunnyLayer:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!65 &489720761029136496
 BoxCollider:
   m_ObjectHideFlags: 0
