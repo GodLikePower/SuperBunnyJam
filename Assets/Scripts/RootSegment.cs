@@ -276,13 +276,24 @@ namespace SuperBunnyJam {
 
                 // Is it even on the segment?
                 var distance = transform.InverseTransformPoint(onLine).z;
-                if (distance < 0f || distance > length) {
+                if (distance > length) {
                     // Nope
                     Debug.Log("Segment collision edge case, if you see too many of these something is wrong");
 
                     return;
                 }
 
+                // ADDED DESTRUCTION
+                distance -= RootManager.instance.addedDestructionRadius;
+
+                if (distance < 0f) {
+                    // Oh, guess we destroyed all of it
+                    TryBreak(breakerColor, penaltyOnColorMismatch, null);
+
+                    return;
+                }
+
+                // Sever
                 length = distance;
             }
         }

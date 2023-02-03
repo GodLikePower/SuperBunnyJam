@@ -13,6 +13,9 @@ namespace SuperBunnyJam {
         /// <remarks>Defaults to CenterEyeAnchor</remarks>
         public GameObject wetAttractor;
 
+        /// <summary>A little bit extra that we take off the tip when severing branches, to avoid weirdness</summary>
+        public float addedDestructionRadius = 0.2f;
+
         [field: SerializeField]
         public float baseBranchProbability { get; private set; }
 

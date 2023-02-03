@@ -26,6 +26,8 @@ namespace SuperBunnyJam {
         float maxIntensity;
 
         private void Start() {
+            rootsByIntensity = new Dictionary<RootSegment, float>();
+
             InvokeRepeating("RefreshIntensity", 1f, 1f);
         }
 
