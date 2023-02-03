@@ -157,15 +157,20 @@ namespace SuperBunnyJam {
         }        
 
         /// <summary>Tries to find a direction in which we can branch without bumping into anything</summary>
-        Vector3? TryFindBranchDirection(int numTries) {            
-            float component() {
-                return Random.value * (Random.value > 0.5f ? RootManager.instance.baseScatter : -RootManager.instance.baseScatter);
-            }
+        Vector3? TryFindBranchDirection(int numTries) {                        
 
             for (var i = 0; i < numTries; ++i) {
-                // Choose random direction
-                var result = Quaternion.Euler(component(), component(), 0) * transform.forward;
-                // TODO: bias towards attractor (or do 2 stages, first biased downwards, then upwards and towards player (after touching water)
+                // Base direction is midway between out current facing and the look facing for the attractor
+                var result = transform.forward;
+                if (RootManager.instance.attractor != null)
+                    result = ((result + (RootManager.instance.attractor.transform.position - transform.position)) * 0.5f).normalized;                
+
+                // Add scatter
+                float component() {
+                    return Random.value * (Random.value > 0.5f ? RootManager.instance.baseScatter : -RootManager.instance.baseScatter);
+                }
+
+                result = Quaternion.Euler(component(), component(), 0) * result;
 
                 // Check for obstacles
                 if (!CheckRootCollision(result, branchCollisionCheckLength))
