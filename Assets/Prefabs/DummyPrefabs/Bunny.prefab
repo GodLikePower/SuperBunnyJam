@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7505578269585740586}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: DummyBunny
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46,7 +46,7 @@ GameObject:
   - component: {fileID: 3419968331840469550}
   - component: {fileID: 5025525083126886116}
   - component: {fileID: 1045088936}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Bunny
   m_TagString: Bunny
   m_Icon: {fileID: 0}
@@ -212,7 +212,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7505578270608882738}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Models
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -247,7 +247,7 @@ GameObject:
   - component: {fileID: 7505578271252934575}
   - component: {fileID: 7505578271252934574}
   - component: {fileID: 7505578271252934573}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: LeftEar (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -344,7 +344,7 @@ GameObject:
   - component: {fileID: 7505578271271523513}
   - component: {fileID: 7505578271271523512}
   - component: {fileID: 7505578271271523511}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -443,7 +443,7 @@ GameObject:
   - component: {fileID: 7505578271532679949}
   - component: {fileID: 7505578271532679948}
   - component: {fileID: 7505578271532679947}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: LeftEar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -538,7 +538,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7332715833337277690}
   - component: {fileID: 1378642929728110281}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Bunny Spawn Feedback
   m_TagString: Untagged
   m_Icon: {fileID: 0}
