@@ -52,7 +52,6 @@ namespace SuperBunnyJam {
             if (isGliding) {
                 isGliding = false;
                 onGlideEnd?.Invoke();
-                Debug.Log("qq end glide");
             }
         }
 

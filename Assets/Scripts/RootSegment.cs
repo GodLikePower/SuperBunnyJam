@@ -42,6 +42,7 @@ namespace SuperBunnyJam {
         const int branchTriesOnFork = branchTriesPerCheck * 5;
         const int branchTriesPerCheck = 8;        
 
+        // TODO: could just eliminate this any number of ways
         const float gapBetweenSegments = 0.3f;
 
         const float startingLength = 0.1f;
@@ -63,7 +64,6 @@ namespace SuperBunnyJam {
         public float targetLength { get; private set; }
 
         MeshRenderer visualization;
-
         private void Start() {
             Init();
         }
@@ -120,6 +120,8 @@ namespace SuperBunnyJam {
         }
 
         void Die() {
+            RootManager.instance.OnDie(this);
+
             Destroy(gameObject);
 
             DestroySuccessors();
@@ -180,6 +182,20 @@ namespace SuperBunnyJam {
             visualization.transform.localScale = collider.size;
             visualization.transform.localPosition = collider.center;
 
+            // Add a little tail, to hide gaps
+            {
+                var tailLength = gapBetweenSegments * 1.1f;
+                
+                var size = visualization.transform.localScale;
+                var position = visualization.transform.localPosition;
+
+                size.z += tailLength;
+                position.z -= tailLength * 0.5f;
+
+                visualization.transform.localScale = size;
+                visualization.transform.localPosition = position;
+            }
+
             visualization.sharedMaterial = isWet ? RootManager.instance.wetRootColors[color] : RootManager.instance.rootColors[color];
         }        
 
@@ -232,7 +248,7 @@ namespace SuperBunnyJam {
         }
 
         /// <param name="breakPosition">If null, will attempt to completely destroy the segment, else will break it at that point</param>
-        public void TryBreak(int breakerColor, bool penaltyOnColorMismatch, Vector3? breakPosition, float collisionForce = 100000f) {
+        public void TryBreak(int breakerColor, bool penaltyOnColorMismatch, Vector3? breakPosition = null, float collisionForce = 100000f) {
             if (breakerColor >= 0 && breakerColor != color) {
                 // Color mismatch
                 // TODO: penalty
