@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Water
   - Bunny
+  - RootBlocker
   layers:
   - Default
   - TransparentFX

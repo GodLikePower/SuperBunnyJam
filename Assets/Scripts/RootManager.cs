@@ -44,8 +44,11 @@ namespace SuperBunnyJam {
         public float rangeForMaxScatter = 3f;
 
         public Material[] rootColors;
+        public Material[] rootCorpseColors;
 
-        public GameObject rootContainer;        
+        public GameObject rootContainer;
+
+        public MeshRenderer rootCorpsePrefab;
 
         [SerializeField]
         RootSegment rootPrefab;
@@ -78,7 +81,7 @@ namespace SuperBunnyJam {
                 rootRootsByColor[i] = new HashSet<RootSegment>();
 
             availableSpawnPoints = spawnPoints.GetComponentsInChildren<Transform>().ToHashSet();
-        }
+        }        
 
         public void OnDie(RootSegment segment) {
             // Is this a root root?

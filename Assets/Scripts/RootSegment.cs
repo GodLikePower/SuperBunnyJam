@@ -100,8 +100,8 @@ namespace SuperBunnyJam {
             var checkExtents = new Vector3(checkTransverseSize.x * 0.5f, checkTransverseSize.y * 0.5f, 0.5f * checkLength);
 
             foreach (var contact in Physics.OverlapBox(endpoint + direction * (epsilon + checkExtents.z), checkExtents, Quaternion.LookRotation(direction))) {
-                if (contact.GetComponent<RootSegment>() != null) {
-                    // Found another root
+                if (contact.GetComponent<RootSegment>() != null || contact.tag.Equals("RootBlocker")) {
+                    // Found another root or a root blocker
                     UnityEngine.Profiling.Profiler.EndSample();
 
                     return true;
@@ -113,6 +113,22 @@ namespace SuperBunnyJam {
             return false;
         }
 
+        MeshRenderer CreateCorpse(float severancePoint) {
+            var result = Instantiate(RootManager.instance.rootCorpsePrefab);
+
+            var epsilon = 0.1f;
+
+            var size = collider.size;
+            size.z = length - severancePoint - epsilon;
+
+            result.transform.localScale = size;
+            result.transform.localPosition = transform.position + transform.forward * (severancePoint + epsilon);
+
+            result.sharedMaterial = RootManager.instance.rootCorpseColors[color];
+
+            return result;
+        }
+
         void DestroySuccessors() {
             foreach (var s in successors)
                 if (s != null)
@@ -121,6 +137,7 @@ namespace SuperBunnyJam {
 
         void Die() {
             RootManager.instance.OnDie(this);
+            EstimateIntensity.instance.OnRootDead(this);
 
             Destroy(gameObject);
 
@@ -197,7 +214,7 @@ namespace SuperBunnyJam {
             }
 
             visualization.sharedMaterial = isWet ? RootManager.instance.wetRootColors[color] : RootManager.instance.rootColors[color];
-        }        
+        }                
 
         /// <summary>Width and height</summary>
         public Vector2 transverseSize {
@@ -262,7 +279,8 @@ namespace SuperBunnyJam {
             // Break root
             if (breakPosition == null) {
                 // Completely
-                Die();
+                CreateCorpse(0f);
+                Die();                
 
                 return;
             }
@@ -294,7 +312,8 @@ namespace SuperBunnyJam {
                 }
 
                 // Sever
-                length = distance;
+                CreateCorpse(distance);
+                length = distance;                
             }
         }
 
@@ -321,6 +340,9 @@ namespace SuperBunnyJam {
                 // We're good to grow
                 length += rate;
                 length = Mathf.Min(length, targetLength);
+
+                if (length >= targetLength)
+                    EstimateIntensity.instance.OnRootDoneGrowing(this);
                 
                 return;
             }

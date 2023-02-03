@@ -1,6 +1,10 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scenes/yshai Sene.unity.meta
+guid: 232161e0e2476e74cadfc5d0037cae8a
+========
 guid: 53fcd11654528774e8605a5686e18b9f
 folderAsset: yes
+>>>>>>>> 5c7d3a919ab1b5c7abed57d41b133c192c7dbc2b:Assets/3D Models/Standing platform.meta
 DefaultImporter:
   externalObjects: {}
   userData: 

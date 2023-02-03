@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Plugins/FMOD/platforms/mac/lib/fmodstudio.bundle/Contents/Info.plist.meta
+guid: 6879e63683121c844a18a0baa485ee35
+DefaultImporter:
+========
 guid: b63bb24bec78f5447913ea7c25e69522
 PrefabImporter:
+>>>>>>>> 5c7d3a919ab1b5c7abed57d41b133c192c7dbc2b:Assets/Test/Tom/Rock0.prefab.meta
   externalObjects: {}
   userData: 
   assetBundleName: 

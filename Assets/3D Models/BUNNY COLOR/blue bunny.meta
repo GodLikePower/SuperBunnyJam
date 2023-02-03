@@ -1,6 +1,10 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/3D Models/BUNNY COLOR/blue bunny.meta
 guid: 7893b72907dc3d94c9ee9e90f2ad0b13
 folderAsset: yes
+========
+guid: 791620cce9aab7c4ebfb3776c21dcffc
+>>>>>>>> 764e145cae73e25dda9cad7c2e3be76fc9aa9e8c:Assets/Plugins/FMOD/platforms/mac/lib/fmodstudioL.bundle/Contents/Info.plist.meta
 DefaultImporter:
   externalObjects: {}
   userData: 
