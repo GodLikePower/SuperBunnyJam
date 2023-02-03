@@ -100,8 +100,8 @@ namespace SuperBunnyJam {
             var checkExtents = new Vector3(checkTransverseSize.x * 0.5f, checkTransverseSize.y * 0.5f, 0.5f * checkLength);
 
             foreach (var contact in Physics.OverlapBox(endpoint + direction * (epsilon + checkExtents.z), checkExtents, Quaternion.LookRotation(direction))) {
-                if (contact.GetComponent<RootSegment>() != null) {
-                    // Found another root
+                if (contact.GetComponent<RootSegment>() != null || contact.tag.Equals("RootBlocker")) {
+                    // Found another root or a root blocker
                     UnityEngine.Profiling.Profiler.EndSample();
 
                     return true;
