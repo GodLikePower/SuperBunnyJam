@@ -18,4 +18,17 @@ namespace SuperBunnyJam {
 
         public float Value() => UnityEngine.Random.value * (max - min) + min;
     }
+
+    public static class UnityExtensions {
+        public static T Demand<T>(this GameObject obj) where T : Component {
+            var result = obj.GetComponent<T>();
+
+            if (result == null)
+                result = obj.AddComponent<T>();
+
+            return result;
+        }
+
+        public static T Demand<T>(this Component component) where T : Component => component.gameObject.Demand<T>();
+    }
 }
