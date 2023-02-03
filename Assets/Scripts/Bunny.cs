@@ -19,8 +19,9 @@ namespace SuperBunnyJam
 
         public float collisionForceMultiplier => throw new System.NotImplementedException();
 
-        public int color => throw new System.NotImplementedException();
-
+        [field: SerializeField]
+        public int color { get; set; }
+        
         public bool isActiveBreaker => throw new System.NotImplementedException();
 
         public bool isObliterator => throw new System.NotImplementedException();
