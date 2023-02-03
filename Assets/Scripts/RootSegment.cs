@@ -271,9 +271,25 @@ namespace SuperBunnyJam {
             {
                 DestroySuccessors();
 
-                // Wait, haven't thought out edge cases here
-                throw new System.NotImplementedException();
+                // Find nearest point on line
+                var onLine = NearestPointOnLine(transform.position, transform.forward, breakPosition.Value);
+
+                // Is it even on the segment?
+                var distance = transform.InverseTransformPoint(onLine).z;
+                if (distance < 0f || distance > length) {
+                    // Nope
+                    Debug.Log("Segment collision edge case, if you see too many of these something is wrong");
+
+                    return;
+                }
+
+                length = distance;
             }
+        }
+
+        Vector3 NearestPointOnLine(Vector3 origin, Vector3 direction, Vector3 point) {
+            var pointToOrigin = origin - point;
+            return point + pointToOrigin - Vector3.Dot(pointToOrigin, direction) * direction;
         }
 
         private void Update() {

@@ -57,6 +57,11 @@ namespace SuperBunnyJam {
             Destroy(this);
         }
 
+        private void OnCollisionEnter(Collision collision) {
+            if (explodesOnImpact && collision.gameObject.GetComponent<RootSegment>() != null)
+                Explode();
+        }
+
         private void Update() {
             // Manually detonated?
             var detonatorInputPressed = detonatorButton switch {

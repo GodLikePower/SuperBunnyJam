@@ -42,13 +42,13 @@ namespace SuperBunnyJam {
 
         public Material[] rootColors;
 
-        public GameObject rootContainer;
+        public GameObject rootContainer;        
 
         [SerializeField]
         RootSegment rootPrefab;
 
         /// <remarks>A rootRoot is the root of a root</remarks>
-        Dictionary<int, HashSet<RootSegment>> rootRootsByColor;
+        Dictionary<int, HashSet<RootSegment>> rootRootsByColor;        
 
         /// <summary>Determines width and height of roots</summary>
         public Roll rootTransverseSize;
