@@ -39,8 +39,8 @@ namespace SuperBunnyJam {
 
         /// <summary>Interval at which we retry growing new segments (if previous attempt was blocked by something)</summary>
         const float branchRetryInterval = 1f;
-        const int branchTriesOnFork = 20;
-        const int branchTriesPerCheck = 4;        
+        const int branchTriesOnFork = branchTriesPerCheck * 5;
+        const int branchTriesPerCheck = 8;        
 
         const float gapBetweenSegments = 0.3f;
 
@@ -53,6 +53,8 @@ namespace SuperBunnyJam {
         /// <see cref="RootManager.rootColors"/>
         public int color;
 
+        public bool isWet { get; private set; }
+
         //LineRenderer renderer;        
 
         /// <summary>_Immediate_ successors</summary>
@@ -63,6 +65,14 @@ namespace SuperBunnyJam {
         MeshRenderer visualization;
 
         private void Start() {
+            Init();
+        }
+
+        public void Init() {
+            if (successors != null)
+                // Already initialized
+                return;
+
             // Straightforward stuff
             {
                 collider = GetComponent<BoxCollider>();
@@ -75,8 +85,8 @@ namespace SuperBunnyJam {
                 visualization = transform.GetChild(0).gameObject.GetComponent<MeshRenderer>();
 
                 successors = new RootSegment[2];
-            }            
-
+            }
+            
             // Length and target length
             length = startingLength;
             targetLength = RootManager.instance.segmentLength.Value();
@@ -84,11 +94,10 @@ namespace SuperBunnyJam {
             RefreshVisualization();
         }
 
-        bool CheckRootCollision(Vector3 direction, float checkLength, float epsilon = 0.1f) {
+        bool CheckRootCollision(Vector3 direction, float checkLength, Vector2 checkTransverseSize, float epsilon = 0.1f) {
             UnityEngine.Profiling.Profiler.BeginSample("GrowthCollisionCheck");
 
-            var checkExtents = collider.size * 0.5f;
-            checkExtents.z = 0.5f * checkLength;
+            var checkExtents = new Vector3(checkTransverseSize.x * 0.5f, checkTransverseSize.y * 0.5f, 0.5f * checkLength);
 
             foreach (var contact in Physics.OverlapBox(endpoint + direction * (epsilon + checkExtents.z), checkExtents, Quaternion.LookRotation(direction))) {
                 if (contact.GetComponent<RootSegment>() != null) {
@@ -118,7 +127,19 @@ namespace SuperBunnyJam {
 
         public Vector3 endpoint => transform.position + transform.forward * length;
 
-        public float growthRate => isGrowing ? RootManager.instance.baseGrowthRate : 0f;
+        public float growthRate {
+            get {
+                if (!isGrowing)
+                    return 0f;
+
+                var result = RootManager.instance.baseGrowthRate;
+
+                if (isWet)
+                    result *= RootManager.instance.wetSpeedMultipier;
+
+                return result;
+            }
+        }
 
         /// <summary>True if segment itself (rather than its successors) is still growing</summary>
         public bool isGrowing => length < targetLength;
@@ -148,34 +169,62 @@ namespace SuperBunnyJam {
                     (collision.impulse / Time.fixedDeltaTime).magnitude * breaker.collisionForceMultiplier);
         }
 
+        private void OnTriggerEnter(Collider other) {            
+            if (other.tag.Equals("Water"))
+                // Splish splash
+                isWet = true;
+        }
+
         void RefreshVisualization() {
             //renderer.SetPosition(1, Vector3.forward * length);
             visualization.transform.localScale = collider.size;
             visualization.transform.localPosition = collider.center;
 
-            visualization.sharedMaterial = RootManager.instance.rootColors[color];
+            visualization.sharedMaterial = isWet ? RootManager.instance.wetRootColors[color] : RootManager.instance.rootColors[color];
         }        
 
+        /// <summary>Width and height</summary>
+        public Vector2 transverseSize {
+            get => collider.size;
+
+            set {
+                var size = collider.size;
+
+                size.x = value.x;
+                size.y = value.y;
+
+                collider.size = size;
+            }
+        }
+
         /// <summary>Tries to find a direction in which we can branch without bumping into anything</summary>
-        Vector3? TryFindBranchDirection(int numTries) {                        
+        (Vector3 direction, Vector2 transverseSize)? TryPlanBranch(int numTries) {
+            var attractor = isWet ? RootManager.instance.wetAttractor : RootManager.instance.dryAttractor;
 
             for (var i = 0; i < numTries; ++i) {
-                // Base direction is midway between out current facing and the look facing for the attractor
-                var result = transform.forward;
-                if (RootManager.instance.attractor != null)
-                    result = ((result + (RootManager.instance.attractor.transform.position - transform.position)) * 0.5f).normalized;                
+                // Base direction is partway between out current facing and the look facing for the attractor
+                var direction = transform.forward;
+                if (attractor != null) {                    
+                    // The lower our scatter modifier, the more we're biased towards the attractor
+                    var scatter = RootManager.instance.ScatterModifier(this);
 
-                // Add scatter
-                float component() {
-                    return Random.value * (Random.value > 0.5f ? RootManager.instance.baseScatter : -RootManager.instance.baseScatter);
+                    var toAttractor = (attractor.transform.position - transform.position);
+                    var maxExtraWeight = 4f;
+
+                    var weight = 1f + (1f - scatter) * maxExtraWeight;
+
+                    direction = ((direction * scatter + toAttractor * weight) / (1f + weight)).normalized;
                 }
 
-                result = Quaternion.Euler(component(), component(), 0) * result;
+                var size = new Vector2(RootManager.instance.rootTransverseSize.Value(), RootManager.instance.rootTransverseSize.Value());
+                                
+                // Add scatter                
+                direction = Quaternion.Euler(RootManager.instance.Scatter(this), RootManager.instance.Scatter(this), 0) * direction;
 
                 // Check for obstacles
-                if (!CheckRootCollision(result, branchCollisionCheckLength))
+                if (!CheckRootCollision(direction, branchCollisionCheckLength, size))
                     // None 
-                    return result;                
+                    return (direction, size);
             }
 
             // Failed
@@ -218,7 +267,7 @@ namespace SuperBunnyJam {
                 var rate = growthRate * Time.deltaTime;
 
                 // Can we continue, or are we about to bump into another root?
-                if (CheckRootCollision(transform.forward, rate)) {
+                if (CheckRootCollision(transform.forward, rate, transverseSize)) {
                     // BUMP WARNING, arrest growth
                     targetLength = length;
                     UnityEngine.Profiling.Profiler.EndSample();
@@ -245,23 +294,35 @@ namespace SuperBunnyJam {
 
             // Yes
             {
-                var direction = TryFindBranchDirection(branchTriesPerCheck);
+                var plan = TryPlanBranch(branchTriesPerCheck);
 
-                if (direction == null) {
+                if (plan == null) {
                     // Couldn't find unobstructed path, abort for now
                     branchRetryTime = Time.time + branchRetryInterval;
 
                     return;
                 }
 
-                successors[0] = RootManager.instance.Spawn(endpoint + direction.Value * gapBetweenSegments, Quaternion.LookRotation(direction.Value), color);
+                RootSegment spawn() {
+                    var spawned = RootManager.instance.Spawn(endpoint + plan.Value.direction * gapBetweenSegments, Quaternion.LookRotation(plan.Value.direction), color,
+                    plan.Value.transverseSize);
+
+                    spawned.isWet = isWet;
+
+                    spawned.transform.parent = RootManager.instance.rootContainer.transform;
+
+                    return spawned;
+                }
+
+                successors[0] = spawn();
 
                 // Should we fork?
                 if (Random.value < RootManager.instance.baseBranchProbability) {
-                    direction = TryFindBranchDirection(branchTriesOnFork);
-                
-                    if (direction != null)
-                        successors[1] = RootManager.instance.Spawn(endpoint + direction.Value * gapBetweenSegments, Quaternion.LookRotation(direction.Value), color);
+                    plan = TryPlanBranch(branchTriesOnFork);
+
+                    if (plan != null) {
+                        successors[1] = spawn();
+                    }
 
                     // Lazy kludge, if we fail to fork, we don't retry later
                 }
