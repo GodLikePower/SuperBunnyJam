@@ -1,18 +1,16 @@
+using BNG;
 using UnityEngine;
 
 namespace SuperBunnyJam
 {
-    public class BunnyHole : MonoBehaviour
+    public class BunnyHole : GrabbableEvents
     {
-        //1. Spawn a bunny
-        //2. Make it pickable
-        //3. If bunny is picked up, spawn a new bunny
         [Header("Bunny Components")]
         [SerializeField]
         private GameObject _bunnyPrefab;
         private GameObject _bunnyClone;
 
-        [Header("Spawn Prameeters")]
+        [Header("Spawn Prame")]
         [SerializeField]
         private float _heightOffset = 1.3f;
         [SerializeField]
@@ -44,8 +42,9 @@ namespace SuperBunnyJam
             }
         }
 
-        private void GrabbableOnGrabBegin()
+        public override void OnGrab(Grabber grabber)
         {
+            base.OnGrab(grabber);
             _bunnyClone = null;
         }
     }
