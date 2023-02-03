@@ -100,8 +100,8 @@ namespace SuperBunnyJam {
             var checkExtents = new Vector3(checkTransverseSize.x * 0.5f, checkTransverseSize.y * 0.5f, 0.5f * checkLength);
 
             foreach (var contact in Physics.OverlapBox(endpoint + direction * (epsilon + checkExtents.z), checkExtents, Quaternion.LookRotation(direction))) {
-                if (contact.GetComponent<RootSegment>() != null) {
-                    // Found another root
+                if (contact.GetComponent<RootSegment>() != null || contact.tag.Equals("RootBlocker")) {
+                    // Found another root or a root blocker
                     UnityEngine.Profiling.Profiler.EndSample();
 
                     return true;
@@ -111,6 +111,22 @@ namespace SuperBunnyJam {
             UnityEngine.Profiling.Profiler.EndSample();
 
             return false;
+        }
+
+        MeshRenderer CreateCorpse(float severancePoint) {
+            var result = Instantiate(RootManager.instance.rootCorpsePrefab);
+
+            var epsilon = 0.1f;
+
+            var size = collider.size;
+            size.z = length - severancePoint - epsilon;
+
+            result.transform.localScale = size;
+            result.transform.localPosition = transform.position + transform.forward * (severancePoint + epsilon);
+
+            result.sharedMaterial = RootManager.instance.rootCorpseColors[color];
+
+            return result;
         }
 
         void DestroySuccessors() {
@@ -197,7 +213,7 @@ namespace SuperBunnyJam {
             }
 
             visualization.sharedMaterial = isWet ? RootManager.instance.wetRootColors[color] : RootManager.instance.rootColors[color];
-        }        
+        }                
 
         /// <summary>Width and height</summary>
         public Vector2 transverseSize {
@@ -262,7 +278,8 @@ namespace SuperBunnyJam {
             // Break root
             if (breakPosition == null) {
                 // Completely
-                Die();
+                CreateCorpse(0f);
+                Die();                
 
                 return;
             }
@@ -271,9 +288,37 @@ namespace SuperBunnyJam {
             {
                 DestroySuccessors();
 
-                // Wait, haven't thought out edge cases here
-                throw new System.NotImplementedException();
+                // Find nearest point on line
+                var onLine = NearestPointOnLine(transform.position, transform.forward, breakPosition.Value);
+
+                // Is it even on the segment?
+                var distance = transform.InverseTransformPoint(onLine).z;
+                if (distance > length) {
+                    // Nope
+                    Debug.Log("Segment collision edge case, if you see too many of these something is wrong");
+
+                    return;
+                }
+
+                // ADDED DESTRUCTION
+                distance -= RootManager.instance.addedDestructionRadius;
+
+                if (distance < 0f) {
+                    // Oh, guess we destroyed all of it
+                    TryBreak(breakerColor, penaltyOnColorMismatch, null);
+
+                    return;
+                }
+
+                // Sever
+                CreateCorpse(distance);
+                length = distance;                
             }
+        }
+
+        Vector3 NearestPointOnLine(Vector3 origin, Vector3 direction, Vector3 point) {
+            var pointToOrigin = origin - point;
+            return point + pointToOrigin - Vector3.Dot(pointToOrigin, direction) * direction;
         }
 
         private void Update() {

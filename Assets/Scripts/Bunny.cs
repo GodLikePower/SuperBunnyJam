@@ -6,7 +6,7 @@ using BNG;
 
 namespace SuperBunnyJam
 {
-    public class Bunny : GrabbableEvents
+    public class Bunny : GrabbableEvents, IRootBreaker
     {
         [SerializeField]
         MMF_Player _bunnySpawnFeedback;
@@ -16,6 +16,16 @@ namespace SuperBunnyJam
         BoxCollider _bunnyCollider;
         [SerializeField]
         float _bunnyForceMoltiplir;
+
+        public float collisionForceMultiplier => throw new System.NotImplementedException();
+
+        public int color => throw new System.NotImplementedException();
+
+        public bool isActiveBreaker => throw new System.NotImplementedException();
+
+        public bool isObliterator => throw new System.NotImplementedException();
+
+        public bool penaltyOnColorMismatch => throw new System.NotImplementedException();
 
         private void Start()
         {
@@ -34,6 +44,20 @@ namespace SuperBunnyJam
             base.OnRelease();
         }
 
+        public void OnBreak(RootSegment segment)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void OnMismatch(RootSegment segment)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void OnTooWeak(RootSegment segment)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
 }

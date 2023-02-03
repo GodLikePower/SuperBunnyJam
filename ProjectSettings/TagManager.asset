@@ -6,11 +6,12 @@ TagManager:
   tags:
   - Water
   - Bunny
+  - RootBlocker
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Bunny
   - Water
   - UI
   - 

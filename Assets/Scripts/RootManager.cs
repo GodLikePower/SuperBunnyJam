@@ -13,6 +13,9 @@ namespace SuperBunnyJam {
         /// <remarks>Defaults to CenterEyeAnchor</remarks>
         public GameObject wetAttractor;
 
+        /// <summary>A little bit extra that we take off the tip when severing branches, to avoid weirdness</summary>
+        public float addedDestructionRadius = 0.2f;
+
         [field: SerializeField]
         public float baseBranchProbability { get; private set; }
 
@@ -41,14 +44,17 @@ namespace SuperBunnyJam {
         public float rangeForMaxScatter = 3f;
 
         public Material[] rootColors;
+        public Material[] rootCorpseColors;
 
         public GameObject rootContainer;
+
+        public MeshRenderer rootCorpsePrefab;
 
         [SerializeField]
         RootSegment rootPrefab;
 
         /// <remarks>A rootRoot is the root of a root</remarks>
-        Dictionary<int, HashSet<RootSegment>> rootRootsByColor;
+        Dictionary<int, HashSet<RootSegment>> rootRootsByColor;        
 
         /// <summary>Determines width and height of roots</summary>
         public Roll rootTransverseSize;
@@ -75,7 +81,7 @@ namespace SuperBunnyJam {
                 rootRootsByColor[i] = new HashSet<RootSegment>();
 
             availableSpawnPoints = spawnPoints.GetComponentsInChildren<Transform>().ToHashSet();
-        }
+        }        
 
         public void OnDie(RootSegment segment) {
             // Is this a root root?
