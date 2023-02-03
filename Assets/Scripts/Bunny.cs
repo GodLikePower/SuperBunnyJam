@@ -17,16 +17,16 @@ namespace SuperBunnyJam
         [SerializeField]
         float _bunnyForceMoltiplir;
 
-        public float collisionForceMultiplier => throw new System.NotImplementedException();
+        public float collisionForceMultiplier => 1f;
 
         [field: SerializeField]
         public int color { get; set; }
         
-        public bool isActiveBreaker => throw new System.NotImplementedException();
+        public bool isActiveBreaker => true;
 
-        public bool isObliterator => throw new System.NotImplementedException();
+        public bool isObliterator => false;
 
-        public bool penaltyOnColorMismatch => throw new System.NotImplementedException();
+        public bool penaltyOnColorMismatch => true;
 
         private void Start()
         {
@@ -47,17 +47,17 @@ namespace SuperBunnyJam
 
         public void OnBreak(RootSegment segment)
         {
-            throw new System.NotImplementedException();
+            /*throw new System.NotImplementedException();*/
         }
 
         public void OnMismatch(RootSegment segment)
         {
-            throw new System.NotImplementedException();
+           /* throw new System.NotImplementedException();*/
         }
 
         public void OnTooWeak(RootSegment segment)
         {
-            throw new System.NotImplementedException();
+           /* throw new System.NotImplementedException();*/
         }
     }
 
