@@ -1,4 +1,3 @@
-using BNG;
 using UnityEngine;
 
 namespace SuperBunnyJam
@@ -8,7 +7,6 @@ namespace SuperBunnyJam
         [Header("Bunny Components")]
         [SerializeField]
         private GameObject _bunnyPrefab;
-        private GameObject _bunnyClone;
 
         [Header("Spawn Prame")]
         [SerializeField]
@@ -16,8 +14,9 @@ namespace SuperBunnyJam
         [SerializeField]
         private float _spawnDelay = 1.0f;
         private float _tempDealy = 0.0f;
-
         private bool _isSpawnable = true;
+        [SerializeField]
+        LayerMask _bunnyLayer;
 
         private void Start()
         {
@@ -30,10 +29,16 @@ namespace SuperBunnyJam
             SpawnBunny();
         }
 
-        private void OnTriggerExit(Collider other)
+        private void FixedUpdate()
         {
-            _isSpawnable = other.CompareTag("Bunny");
-            
+            if(Physics.Raycast(transform.position + Vector3.down * 2 , transform.up, 5, _bunnyLayer))
+            {
+                _isSpawnable = false;
+            }
+            else
+            {
+                _isSpawnable = true;
+            }
         }
 
         private void SpawnBunny()
@@ -44,11 +49,17 @@ namespace SuperBunnyJam
 
                 if (_tempDealy <= 0)
                 {
-                    _bunnyClone = Instantiate(_bunnyPrefab, transform.position + new Vector3(0, _heightOffset, 0), Quaternion.identity);
+                    Instantiate(_bunnyPrefab, transform.position + new Vector3(0, _heightOffset, 0), Quaternion.identity);
                     _tempDealy = _spawnDelay;
                     _isSpawnable = false;
                 }
             }
+        }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawRay(transform.position, transform.up * 5);
         }
     }
 }
