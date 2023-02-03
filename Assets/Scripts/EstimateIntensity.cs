@@ -22,13 +22,19 @@ namespace SuperBunnyJam {
 
         Dictionary<RootSegment, float> rootsByIntensity;
 
+        FMODUnity.StudioEventEmitter studioEventEmitter;
+
         [SerializeField]
         float maxIntensity;
 
         private void Start() {
+            studioEventEmitter = FindObjectOfType<FMODUnity.StudioEventEmitter>();
+
             rootsByIntensity = new Dictionary<RootSegment, float>();
 
             InvokeRepeating("RefreshIntensity", 1f, 1f);
+
+            FindObjectOfType<FMODUnity.StudioEventEmitter>().SetParameter("Intensity", 80f, true);
         }
 
         public void OnRootDoneGrowing(RootSegment root) {
@@ -53,9 +59,9 @@ namespace SuperBunnyJam {
         public void RefreshIntensity() {
             Profiler.BeginSample("RefreshIntensity");
 
-            var intensity = Mathf.Min(maxIntensity, rootsByIntensity.Values.Sum());         
-            
-            // TODO: plug into our musical whatsit. Multiply by 100 first
+            var intensity = Mathf.Min(maxIntensity, rootsByIntensity.Values.Sum());
+
+            studioEventEmitter.SetParameter("Intensity", intensity * 100f);
 
             Profiler.EndSample();
         }

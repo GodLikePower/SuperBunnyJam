@@ -5,7 +5,7 @@ using UnityEngine;
 namespace SuperBunnyJam {
     public class Main : SingletonBehavior<Main> {
         GameObject _centerEyeAnchor;
-
+        
         public GameObject centerEyeAnchor {
             get {
                 if (_centerEyeAnchor == null)
