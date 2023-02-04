@@ -71,7 +71,7 @@ PrefabInstance:
     - target: {fileID: 2352061438063840372, guid: ee6f4593e7764f44bae2c4364ea86603,
         type: 3}
       propertyPath: m_Name
-      value: Blue Bunny Hole
+      value: Purple Bunny Hole
       objectReference: {fileID: 0}
     - target: {fileID: 4615696061096496314, guid: ee6f4593e7764f44bae2c4364ea86603,
         type: 3}
@@ -81,12 +81,12 @@ PrefabInstance:
     - target: {fileID: 4615696061096496314, guid: ee6f4593e7764f44bae2c4364ea86603,
         type: 3}
       propertyPath: InitialModule.startColor.maxColor.g
-      value: 0.13681841
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4615696061096496314, guid: ee6f4593e7764f44bae2c4364ea86603,
         type: 3}
       propertyPath: InitialModule.startColor.maxColor.r
-      value: 0
+      value: 0.60507107
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ee6f4593e7764f44bae2c4364ea86603, type: 3}
