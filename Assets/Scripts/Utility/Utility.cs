@@ -54,5 +54,11 @@ namespace SuperBunnyJam {
         }
 
         public static T Demand<T>(this Component component) where T : Component => component.gameObject.Demand<T>();
+
+        // Cutting all the corners
+        public static void TryPlaySound(this Component component, FMODUnity.EventReference evt) {
+            if (!evt.IsNull)
+                FMODUnity.RuntimeManager.PlayOneShot(evt, component.transform.position);
+        }
     }
 }

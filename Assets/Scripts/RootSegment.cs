@@ -205,7 +205,7 @@ namespace SuperBunnyJam {
             var breaker = collision.gameObject.GetComponent<IRootBreaker>();
             if (breaker != null && breaker.isActiveBreaker)
                 TryBreak(breaker.color, breaker.penaltyOnColorMismatch, collision.GetContact(0).point,
-                    (collision.impulse / Time.fixedDeltaTime).magnitude * breaker.collisionForceMultiplier);
+                    (collision.impulse / Time.fixedDeltaTime).magnitude * breaker.collisionForceMultiplier, breaker: breaker);
         }
 
         private void OnTriggerEnter(Collider other) {            
@@ -289,21 +289,30 @@ namespace SuperBunnyJam {
         }
 
         /// <param name="breakPosition">If null, will attempt to completely destroy the segment, else will break it at that point</param>
-        public void TryBreak(int breakerColor, bool penaltyOnColorMismatch, Vector3? breakPosition = null, float collisionForce = 100000f, bool applyShrinkAndStun = true) {
+        public void TryBreak(int breakerColor, bool penaltyOnColorMismatch, Vector3? breakPosition = null, float collisionForce = 100000f, bool applyShrinkAndStun = true, IRootBreaker breaker = null) {
             if (breakerColor >= 0 && breakerColor != color) {
                 // Color mismatch
-                // TODO: penalty
+                if (breaker != null)
+                    breaker.OnMismatch(this);
+                
                 return;
             }
 
-            if (collisionForce < RootManager.instance.baseCollisionForceRequiredToBreak)
+            if (collisionForce < RootManager.instance.baseCollisionForceRequiredToBreak) {
                 // Not enough force
+                if (breaker != null)
+                    breaker.OnTooWeak(this);
+
                 return;
+            }
 
             // Break root
             if (applyShrinkAndStun) 
                 // And make it hurt
                 pendingShrink = Mathf.Max(0f, pendingShrink) + RootManager.instance.shrinkTimeOnHit;
+
+            if (breaker != null)
+                breaker.OnBreak(this);
 
             if (breakPosition == null) {
                 // Break it completely

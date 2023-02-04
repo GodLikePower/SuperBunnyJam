@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8408770299839572272}
   - component: {fileID: 5916046492344063643}
   - component: {fileID: -2205354500381869354}
+  - component: {fileID: 4238953514922200703}
   m_Layer: 0
   m_Name: Rock0
   m_TagString: Untagged
@@ -128,3 +129,22 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &4238953514922200703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4029914214602754563}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3d5ee15b96ba9a4eb956343726642c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventReference:
+    Guid:
+      Data1: 1690927313
+      Data2: 1117332611
+      Data3: 1060927669
+      Data4: -1878406027
+    Path: event:/RootsBreak
