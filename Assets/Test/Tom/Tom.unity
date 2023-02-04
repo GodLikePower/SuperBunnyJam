@@ -788,6 +788,9 @@ MonoBehaviour:
     min: 8
   decreaseScatterWithProximityToWetAttractor: 1
   maxRoots: 10
+  nubbinPrefabs:
+  - {fileID: 5949543837860691920, guid: 011418e0e3e7351429269461da3cdc43, type: 3}
+  - {fileID: 1721041562043480663, guid: 74125e821be566d4fb60cd5da2f6d8c3, type: 3}
   rangeForMaxScatter: 6
   rootColors:
   - {fileID: 2100000, guid: be62b877b4c601c4daef86f8acdfd039, type: 2}
@@ -798,13 +801,16 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 257fc2a773659194b9b41188a86ec771, type: 2}
   - {fileID: 2100000, guid: 05b79581f4090ff4aa6ef063adbf50b3, type: 2}
   rootContainer: {fileID: 442234939}
-  rootCorpsePrefab: {fileID: 9205473144247534312, guid: 5c14520ff0e7043438f83d2b8a60eb59,
+  rootCorpsePrefab: {fileID: 145390722892857860, guid: fa33a4e13d98eff4b992fc9e6b509a7d,
     type: 3}
   rootPrefab: {fileID: 1684638936250987369, guid: e6dec2e1396ad68438a20de1b2c20408,
     type: 3}
   rootTransverseSize:
     max: 0.5
     min: 0.15
+  shrinkTimeOnHit: 1
+  shrinkRate: 3
+  stunTimeAfterShrink: 0.5
   segmentLength:
     max: 3
     min: 1.5
@@ -1080,6 +1086,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2af1d2045149fe743b81bc4d1a6f8406, type: 3}
+--- !u!1 &712752315 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5117846498257179513, guid: 2af1d2045149fe743b81bc4d1a6f8406,
+    type: 3}
+  m_PrefabInstance: {fileID: 712752314}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &712752316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 712752315}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04104945fd442644c8544504be0894a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trackingType: 0
+  controllerHand: 2
+  AverageVelocityCount: 3
 --- !u!1 &825364987
 GameObject:
   m_ObjectHideFlags: 0

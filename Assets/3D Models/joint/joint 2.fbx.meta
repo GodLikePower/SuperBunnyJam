@@ -3,7 +3,17 @@ guid: d8e0caa07b7137b4d9ccae98f6629437
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BackColor
+    second: {fileID: 2100000, guid: 6fbff12655fc818458d3717a2910cb11, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Wood_Veneer_01
+    second: {fileID: 2100000, guid: 8d29a83fa944e7848ac447e8fcedc165, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

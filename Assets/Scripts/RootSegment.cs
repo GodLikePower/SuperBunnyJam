@@ -40,7 +40,8 @@ namespace SuperBunnyJam {
         /// <summary>Interval at which we retry growing new segments (if previous attempt was blocked by something)</summary>
         const float branchRetryInterval = 1f;
         const int branchTriesOnFork = branchTriesPerCheck * 5;
-        const int branchTriesPerCheck = 8;        
+        const int branchTriesPerCheck = 8;
+        const float growthCollisionCheckInterval = 0.3f;
 
         // TODO: could just eliminate this any number of ways
         const float gapBetweenSegments = 0.3f;
@@ -56,16 +57,26 @@ namespace SuperBunnyJam {
 
         public bool isWet { get; private set; }
 
-        //LineRenderer renderer;
+        float nextGrowthCollisionCheck;
 
-        RootSegment predecessor;
+        /// <summary>A purely visual nubbin, to make joints look nicer</summary>
+        [HideInInspector]
+        public Nubbin nubbin;        
+
+        [HideInInspector]
+        public RootSegment predecessor;
 
         /// <summary>_Immediate_ successors</summary>
         public RootSegment[] successors { get; private set; }
 
         public float targetLength { get; private set; }
 
-        MeshRenderer visualization;
+        [SerializeField]
+        GameObject visualization;
+        [SerializeField]
+        int visualizationMaterialIndex;
+        [SerializeField]
+        MeshRenderer visualizationRenderer;
         private void Start() {
             Init();
         }
@@ -78,13 +89,6 @@ namespace SuperBunnyJam {
             // Straightforward stuff
             {
                 collider = GetComponent<BoxCollider>();
-
-                //renderer = GetComponent<LineRenderer>();
-                //renderer.useWorldSpace = false;
-                //renderer.SetPosition(0, Vector3.zero);
-                //renderer.SetPosition(1, Vector3.zero);
-
-                visualization = transform.GetChild(0).gameObject.GetComponent<MeshRenderer>();
 
                 successors = new RootSegment[2];
             }
@@ -100,7 +104,7 @@ namespace SuperBunnyJam {
         }
 
         bool CheckRootCollision(Vector3 direction, float checkLength, Vector2 checkTransverseSize, float epsilon = 0.1f) {
-            UnityEngine.Profiling.Profiler.BeginSample("GrowthCollisionCheck");
+            UnityEngine.Profiling.Profiler.BeginSample("RootCollisionCheck");
 
             var checkExtents = new Vector3(checkTransverseSize.x * 0.5f, checkTransverseSize.y * 0.5f, 0.5f * checkLength);
 
@@ -118,7 +122,7 @@ namespace SuperBunnyJam {
             return false;
         }
 
-        MeshRenderer CreateCorpse(float severancePoint) {
+        RootCorpse CreateCorpse(float severancePoint) {
             var result = Instantiate(RootManager.instance.rootCorpsePrefab);
 
             var epsilon = 0.1f;
@@ -129,7 +133,7 @@ namespace SuperBunnyJam {
             result.transform.localScale = size;
             result.transform.localPosition = transform.position + transform.forward * (severancePoint + epsilon);
 
-            result.sharedMaterial = RootManager.instance.rootCorpseColors[color];
+            result.SetMaterial(RootManager.instance.rootCorpseColors[color]);
 
             return result;
         }
@@ -138,6 +142,11 @@ namespace SuperBunnyJam {
             foreach (var s in successors)
                 if (s != null)
                     s.Die();
+
+            if (nubbin != null) {
+                nubbin.Die();
+                nubbin = null;
+            }
         }
 
         void Die() {
@@ -145,6 +154,8 @@ namespace SuperBunnyJam {
             EstimateIntensity.instance.OnRootDead(this);
 
             Destroy(gameObject);
+            if (nubbin != null)
+                nubbin.Die();
 
             DestroySuccessors();
 
@@ -157,7 +168,7 @@ namespace SuperBunnyJam {
 
         public float growthRate {
             get {
-                if (!isGrowingOrShrinking)
+                if (!isGrowing)
                     return 0f;
 
                 var result = RootManager.instance.baseGrowthRate;
@@ -170,7 +181,7 @@ namespace SuperBunnyJam {
         }
 
         /// <summary>True if segment itself (rather than its successors) is still growing</summary>
-        public bool isGrowingOrShrinking => length < targetLength;
+        public bool isGrowing => length < targetLength;
 
         public float length {
             get => collider.size.z;
@@ -224,7 +235,9 @@ namespace SuperBunnyJam {
                 visualization.transform.localPosition = position;
             }
 
-            visualization.sharedMaterial = isWet ? RootManager.instance.wetRootColors[color] : RootManager.instance.rootColors[color];
+            var materials = visualizationRenderer.sharedMaterials;
+            materials[visualizationMaterialIndex] = isWet ? RootManager.instance.wetRootColors[color] : RootManager.instance.rootColors[color];
+            visualizationRenderer.sharedMaterials = materials;
         }                
 
         /// <summary>Width and height</summary>
@@ -338,8 +351,18 @@ namespace SuperBunnyJam {
         }
 
         private void Update() {
+            // Kludgy nubbin update
+            if (nubbin != null && successors[0] == null && successors[1] == null) {
+                nubbin.Die();
+                nubbin = null;
+            }
+
+            // Kludge: no shrinking if we have successors
+            if (pendingShrink > 0f && (successors[0] != null || successors[1] != null))
+                pendingShrink = -RootManager.instance.stunTimeAfterShrink;
+
             // Are we growing or shrinking?
-            if (isGrowingOrShrinking) {
+            if (isGrowing || pendingShrink > 0f) {
                 // Yes. So, growing, or shrinking?
                 if (pendingShrink > -RootManager.instance.stunTimeAfterShrink) {
                     // Shrinking. Or just stunned
@@ -370,13 +393,20 @@ namespace SuperBunnyJam {
                 // Growing
                 var rate = growthRate * Time.deltaTime;
 
-                // Can we continue, or are we about to bump into another root?
-                if (CheckRootCollision(transform.forward, rate, transverseSize)) {
-                    // BUMP WARNING, arrest growth
-                    targetLength = length;
-                    UnityEngine.Profiling.Profiler.EndSample();
+                // Can we continue, or are we about to bump into another root?                
+                {
+                    // KLUDGE, we only occasionally check this, sometimes we just blunder forward
+                    if (nextGrowthCollisionCheck <= Time.time) {
+                        nextGrowthCollisionCheck = Time.time + growthCollisionCheckInterval;
 
-                    return;
+                        if (CheckRootCollision(transform.forward, rate, transverseSize)) {
+                            // BUMP WARNING, arrest growth
+                            targetLength = length;
+                            UnityEngine.Profiling.Profiler.EndSample();
+
+                            return;
+                        }
+                    }
                 }
 
                 // We're good to grow
@@ -412,13 +442,9 @@ namespace SuperBunnyJam {
 
                 RootSegment spawn() {
                     var spawned = RootManager.instance.Spawn(endpoint + plan.Value.direction * gapBetweenSegments, Quaternion.LookRotation(plan.Value.direction), color,
-                    plan.Value.transverseSize);
+                    plan.Value.transverseSize, this);
 
-                    spawned.isWet = isWet;
-
-                    spawned.transform.parent = RootManager.instance.rootContainer.transform;
-
-                    spawned.predecessor = this;
+                    spawned.isWet = isWet;                    
 
                     return spawned;
                 }

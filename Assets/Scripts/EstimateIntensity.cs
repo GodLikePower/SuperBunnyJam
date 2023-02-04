@@ -17,6 +17,8 @@ namespace SuperBunnyJam {
 
     public class EstimateIntensity : SingletonBehavior<EstimateIntensity> {
 
+        public float currentIntensity { get; private set; }
+
         [SerializeField]
         IntensityBracket[] intensityBrackets;
 
@@ -57,9 +59,9 @@ namespace SuperBunnyJam {
         public void RefreshIntensity() {
             Profiler.BeginSample("RefreshIntensity");
 
-            var intensity = Mathf.Min(maxIntensity, rootsByIntensity.Values.Sum()) / maxIntensity;
+            currentIntensity = Mathf.Min(maxIntensity, rootsByIntensity.Values.Sum()) / maxIntensity;
 
-            studioEventEmitter.SetParameter("Intensity", intensity * 100f);
+            studioEventEmitter.SetParameter("Intensity", currentIntensity * 100f);
 
             //Debug.Log($"Threats: {string.Join(", ", rootsByIntensity.GroupBy(p => p.Value).Select(g => g.Count()))}, intensity {intensity * 100f}");
 
