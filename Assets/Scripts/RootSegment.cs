@@ -71,7 +71,12 @@ namespace SuperBunnyJam {
 
         public float targetLength { get; private set; }
 
-        MeshRenderer visualization;
+        [SerializeField]
+        GameObject visualization;
+        [SerializeField]
+        int visualizationMaterialIndex;
+        [SerializeField]
+        MeshRenderer visualizationRenderer;
         private void Start() {
             Init();
         }
@@ -84,8 +89,6 @@ namespace SuperBunnyJam {
             // Straightforward stuff
             {
                 collider = GetComponent<BoxCollider>();
-
-                visualization = transform.GetChild(0).gameObject.GetComponent<MeshRenderer>();
 
                 successors = new RootSegment[2];
             }
@@ -119,7 +122,7 @@ namespace SuperBunnyJam {
             return false;
         }
 
-        MeshRenderer CreateCorpse(float severancePoint) {
+        RootCorpse CreateCorpse(float severancePoint) {
             var result = Instantiate(RootManager.instance.rootCorpsePrefab);
 
             var epsilon = 0.1f;
@@ -130,7 +133,7 @@ namespace SuperBunnyJam {
             result.transform.localScale = size;
             result.transform.localPosition = transform.position + transform.forward * (severancePoint + epsilon);
 
-            result.sharedMaterial = RootManager.instance.rootCorpseColors[color];
+            result.SetMaterial(RootManager.instance.rootCorpseColors[color]);
 
             return result;
         }
@@ -139,6 +142,11 @@ namespace SuperBunnyJam {
             foreach (var s in successors)
                 if (s != null)
                     s.Die();
+
+            if (nubbin != null) {
+                nubbin.Die();
+                nubbin = null;
+            }
         }
 
         void Die() {
@@ -227,7 +235,9 @@ namespace SuperBunnyJam {
                 visualization.transform.localPosition = position;
             }
 
-            visualization.sharedMaterial = isWet ? RootManager.instance.wetRootColors[color] : RootManager.instance.rootColors[color];
+            var materials = visualizationRenderer.sharedMaterials;
+            materials[visualizationMaterialIndex] = isWet ? RootManager.instance.wetRootColors[color] : RootManager.instance.rootColors[color];
+            visualizationRenderer.sharedMaterials = materials;
         }                
 
         /// <summary>Width and height</summary>
@@ -342,7 +352,7 @@ namespace SuperBunnyJam {
 
         private void Update() {
             // Kludgy nubbin update
-            if (successors[0] == null && successors[1] == null) {
+            if (nubbin != null && successors[0] == null && successors[1] == null) {
                 nubbin.Die();
                 nubbin = null;
             }
@@ -428,7 +438,7 @@ namespace SuperBunnyJam {
 
                 RootSegment spawn() {
                     var spawned = RootManager.instance.Spawn(endpoint + plan.Value.direction * gapBetweenSegments, Quaternion.LookRotation(plan.Value.direction), color,
-                    plan.Value.transverseSize);
+                    plan.Value.transverseSize, this);
 
                     spawned.isWet = isWet;                    
 

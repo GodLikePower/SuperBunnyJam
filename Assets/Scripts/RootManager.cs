@@ -51,7 +51,7 @@ namespace SuperBunnyJam {
 
         public GameObject rootContainer;
 
-        public MeshRenderer rootCorpsePrefab;
+        public RootCorpse rootCorpsePrefab;
 
         [SerializeField]
         RootSegment rootPrefab;

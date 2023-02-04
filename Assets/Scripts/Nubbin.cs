@@ -6,6 +6,7 @@ namespace SuperBunnyJam {
     public class Nubbin : MonoBehaviour {
         bool isGrowing;
 
+        [HideInInspector]
         public float targetScale;
 
         private void Start() {
