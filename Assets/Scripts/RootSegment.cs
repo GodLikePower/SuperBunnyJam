@@ -40,7 +40,8 @@ namespace SuperBunnyJam {
         /// <summary>Interval at which we retry growing new segments (if previous attempt was blocked by something)</summary>
         const float branchRetryInterval = 1f;
         const int branchTriesOnFork = branchTriesPerCheck * 5;
-        const int branchTriesPerCheck = 8;        
+        const int branchTriesPerCheck = 8;
+        const float growthCollisionCheckInterval = 0.3f;
 
         // TODO: could just eliminate this any number of ways
         const float gapBetweenSegments = 0.3f;
@@ -56,9 +57,14 @@ namespace SuperBunnyJam {
 
         public bool isWet { get; private set; }
 
-        //LineRenderer renderer;
+        float nextGrowthCollisionCheck;
 
-        RootSegment predecessor;
+        /// <summary>A purely visual nubbin, to make joints look nicer</summary>
+        [HideInInspector]
+        public Nubbin nubbin;        
+
+        [HideInInspector]
+        public RootSegment predecessor;
 
         /// <summary>_Immediate_ successors</summary>
         public RootSegment[] successors { get; private set; }
@@ -79,11 +85,6 @@ namespace SuperBunnyJam {
             {
                 collider = GetComponent<BoxCollider>();
 
-                //renderer = GetComponent<LineRenderer>();
-                //renderer.useWorldSpace = false;
-                //renderer.SetPosition(0, Vector3.zero);
-                //renderer.SetPosition(1, Vector3.zero);
-
                 visualization = transform.GetChild(0).gameObject.GetComponent<MeshRenderer>();
 
                 successors = new RootSegment[2];
@@ -100,7 +101,7 @@ namespace SuperBunnyJam {
         }
 
         bool CheckRootCollision(Vector3 direction, float checkLength, Vector2 checkTransverseSize, float epsilon = 0.1f) {
-            UnityEngine.Profiling.Profiler.BeginSample("GrowthCollisionCheck");
+            UnityEngine.Profiling.Profiler.BeginSample("RootCollisionCheck");
 
             var checkExtents = new Vector3(checkTransverseSize.x * 0.5f, checkTransverseSize.y * 0.5f, 0.5f * checkLength);
 
@@ -145,6 +146,8 @@ namespace SuperBunnyJam {
             EstimateIntensity.instance.OnRootDead(this);
 
             Destroy(gameObject);
+            if (nubbin != null)
+                nubbin.Die();
 
             DestroySuccessors();
 
@@ -338,6 +341,12 @@ namespace SuperBunnyJam {
         }
 
         private void Update() {
+            // Kludgy nubbin update
+            if (successors[0] == null && successors[1] == null) {
+                nubbin.Die();
+                nubbin = null;
+            }
+
             // Are we growing or shrinking?
             if (isGrowingOrShrinking) {
                 // Yes. So, growing, or shrinking?
@@ -370,13 +379,20 @@ namespace SuperBunnyJam {
                 // Growing
                 var rate = growthRate * Time.deltaTime;
 
-                // Can we continue, or are we about to bump into another root?
-                if (CheckRootCollision(transform.forward, rate, transverseSize)) {
-                    // BUMP WARNING, arrest growth
-                    targetLength = length;
-                    UnityEngine.Profiling.Profiler.EndSample();
+                // Can we continue, or are we about to bump into another root?                
+                {
+                    // KLUDGE, we only occasionally check this, sometimes we just blunder forward
+                    if (nextGrowthCollisionCheck <= Time.time) {
+                        nextGrowthCollisionCheck = Time.time + growthCollisionCheckInterval;
 
-                    return;
+                        if (CheckRootCollision(transform.forward, rate, transverseSize)) {
+                            // BUMP WARNING, arrest growth
+                            targetLength = length;
+                            UnityEngine.Profiling.Profiler.EndSample();
+
+                            return;
+                        }
+                    }
                 }
 
                 // We're good to grow
@@ -414,11 +430,7 @@ namespace SuperBunnyJam {
                     var spawned = RootManager.instance.Spawn(endpoint + plan.Value.direction * gapBetweenSegments, Quaternion.LookRotation(plan.Value.direction), color,
                     plan.Value.transverseSize);
 
-                    spawned.isWet = isWet;
-
-                    spawned.transform.parent = RootManager.instance.rootContainer.transform;
-
-                    spawned.predecessor = this;
+                    spawned.isWet = isWet;                    
 
                     return spawned;
                 }

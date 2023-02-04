@@ -41,6 +41,9 @@ namespace SuperBunnyJam {
 
         float nextSpawnTime;
 
+        [SerializeField]
+        Nubbin[] nubbinPrefabs;
+
         public float rangeForMaxScatter = 3f;
 
         public Material[] rootColors;
@@ -122,13 +125,31 @@ namespace SuperBunnyJam {
             return 1f;
         }
 
-        public RootSegment Spawn(Vector3 position, Quaternion rotation, int color, Vector2 size) {
+        public RootSegment Spawn(Vector3 position, Quaternion rotation, int color, Vector2 size, RootSegment predecessor = null) {
             var result = Instantiate(rootPrefab, position, rotation);
 
             result.Init();
 
             result.color = color;
             result.transverseSize = size;
+
+            if (predecessor != null) {
+                result.predecessor = predecessor;
+
+                if (nubbinPrefabs.Length > 0 && predecessor.nubbin == null) {
+                    // Nub
+                    var nubbin = Instantiate(nubbinPrefabs.Choice());
+
+                    nubbin.transform.position = (result.transform.position + predecessor.endpoint) * 0.5f;
+                    nubbin.targetScale = Mathf.Max(result.transverseSize.x, result.transverseSize.y, predecessor.transverseSize.x, predecessor.transverseSize.y);
+
+                    predecessor.nubbin = nubbin;
+
+                    nubbin.transform.parent = rootContainer.transform;
+                }
+            }
+
+            result.transform.parent = rootContainer.transform;
 
             return result;
         }
