@@ -485,11 +485,11 @@ MonoBehaviour:
   <color>k__BackingField: 1
   soundForGrab:
     Guid:
-      Data1: 363151869
-      Data2: 1312100956
-      Data3: -1438876765
-      Data4: 952036122
-    Path: event:/RabbitGrab
+      Data1: -724048189
+      Data2: 1203326932
+      Data3: 2105061804
+      Data4: -2018454133
+    Path: event:/RabbitThrow
   soundForRelease:
     Guid:
       Data1: -724048189
@@ -499,11 +499,11 @@ MonoBehaviour:
     Path: event:/RabbitThrow
   soundForBreakRoot:
     Guid:
-      Data1: 1887492483
-      Data2: 1167484743
-      Data3: 1678885788
-      Data4: -1528215496
-    Path: event:/RabbitBreak
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   soundForTooWeak:
     Guid:
       Data1: 0
