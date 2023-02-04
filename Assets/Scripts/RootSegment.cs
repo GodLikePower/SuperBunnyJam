@@ -56,7 +56,9 @@ namespace SuperBunnyJam {
 
         public bool isWet { get; private set; }
 
-        //LineRenderer renderer;        
+        //LineRenderer renderer;
+
+        RootSegment predecessor;
 
         /// <summary>_Immediate_ successors</summary>
         public RootSegment[] successors { get; private set; }
@@ -90,6 +92,9 @@ namespace SuperBunnyJam {
             // Length and target length
             length = startingLength;
             targetLength = RootManager.instance.segmentLength.Value();
+
+            // Stun kludge
+            pendingShrink = -RootManager.instance.stunTimeAfterShrink;
 
             RefreshVisualization();
         }
@@ -142,13 +147,17 @@ namespace SuperBunnyJam {
             Destroy(gameObject);
 
             DestroySuccessors();
+
+            // Pass shrink up the chain
+            if (predecessor != null)
+                predecessor.pendingShrink = pendingShrink;
         }
 
         public Vector3 endpoint => transform.position + transform.forward * length;
 
         public float growthRate {
             get {
-                if (!isGrowing)
+                if (!isGrowingOrShrinking)
                     return 0f;
 
                 var result = RootManager.instance.baseGrowthRate;
@@ -161,7 +170,7 @@ namespace SuperBunnyJam {
         }
 
         /// <summary>True if segment itself (rather than its successors) is still growing</summary>
-        public bool isGrowing => length < targetLength;
+        public bool isGrowingOrShrinking => length < targetLength;
 
         public float length {
             get => collider.size.z;
@@ -193,6 +202,8 @@ namespace SuperBunnyJam {
                 // Splish splash
                 isWet = true;
         }
+
+        float pendingShrink;
 
         void RefreshVisualization() {
             //renderer.SetPosition(1, Vector3.forward * length);
@@ -265,7 +276,7 @@ namespace SuperBunnyJam {
         }
 
         /// <param name="breakPosition">If null, will attempt to completely destroy the segment, else will break it at that point</param>
-        public void TryBreak(int breakerColor, bool penaltyOnColorMismatch, Vector3? breakPosition = null, float collisionForce = 100000f) {
+        public void TryBreak(int breakerColor, bool penaltyOnColorMismatch, Vector3? breakPosition = null, float collisionForce = 100000f, bool applyShrinkAndStun = true) {
             if (breakerColor >= 0 && breakerColor != color) {
                 // Color mismatch
                 // TODO: penalty
@@ -277,8 +288,12 @@ namespace SuperBunnyJam {
                 return;
 
             // Break root
+            if (applyShrinkAndStun) 
+                // And make it hurt
+                pendingShrink = Mathf.Max(0f, pendingShrink) + RootManager.instance.shrinkTimeOnHit;
+
             if (breakPosition == null) {
-                // Completely
+                // Break it completely
                 CreateCorpse(0f);
                 Die();                
 
@@ -306,7 +321,7 @@ namespace SuperBunnyJam {
 
                 if (distance < 0f) {
                     // Oh, guess we destroyed all of it
-                    TryBreak(breakerColor, penaltyOnColorMismatch, null);
+                    TryBreak(breakerColor, penaltyOnColorMismatch, null, applyShrinkAndStun: false);
 
                     return;
                 }
@@ -323,9 +338,36 @@ namespace SuperBunnyJam {
         }
 
         private void Update() {
-            // Are we growing?
-            if (isGrowing) {
-                // Yes
+            // Are we growing or shrinking?
+            if (isGrowingOrShrinking) {
+                // Yes. So, growing, or shrinking?
+                if (pendingShrink > -RootManager.instance.stunTimeAfterShrink) {
+                    // Shrinking. Or just stunned
+                    // Note KLUDGE: pendingShrink between -stunTimeAfterShrink and 0f is stun state
+                    if (pendingShrink < 0f) {
+                        // Stunned
+                        pendingShrink -= Time.deltaTime;
+
+                        return;
+                    }
+
+                    // Shrinking
+                    pendingShrink -= Time.deltaTime;
+                    var afterShrink = length - Time.deltaTime * RootManager.instance.shrinkRate;
+
+                    if (afterShrink <= 0f) {
+                        // We have shrunk into a corn cob
+                        Die();
+
+                        return;
+                    }
+
+                    length = afterShrink;
+
+                    return;
+                }
+
+                // Growing
                 var rate = growthRate * Time.deltaTime;
 
                 // Can we continue, or are we about to bump into another root?
@@ -375,6 +417,8 @@ namespace SuperBunnyJam {
                     spawned.isWet = isWet;
 
                     spawned.transform.parent = RootManager.instance.rootContainer.transform;
+
+                    spawned.predecessor = this;
 
                     return spawned;
                 }
