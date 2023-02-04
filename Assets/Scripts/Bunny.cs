@@ -16,6 +16,8 @@ namespace SuperBunnyJam
         BoxCollider _bunnyCollider;
         [SerializeField]
         float _bunnyForceMoltiplir;
+        [SerializeField]
+        MMF_Player _bunnyPullFeedback;
 
         public float collisionForceMultiplier => 1f;
 
@@ -38,11 +40,13 @@ namespace SuperBunnyJam
         {
             base.OnGrab(grabber);
             _bunnyRB.isKinematic = false;
+            _bunnyPullFeedback?.PlayFeedbacks();
         }
 
         public override void OnRelease()
         {
             base.OnRelease();
+            Destroy(gameObject, 5);
         }
 
         public void OnBreak(RootSegment segment)

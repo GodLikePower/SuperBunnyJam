@@ -1,4 +1,5 @@
 using UnityEngine;
+using MoreMountains.Feedbacks;
 
 namespace SuperBunnyJam
 {
@@ -7,6 +8,8 @@ namespace SuperBunnyJam
         [Header("Bunny Components")]
         [SerializeField]
         private GameObject _bunnyPrefab;
+        [SerializeField]
+        MMF_Player _pullBunnyFeedback;
 
         [Header("Spawn Prame")]
         [SerializeField]
@@ -36,7 +39,7 @@ namespace SuperBunnyJam
                 _isSpawnable = false;
             }
             else
-            {
+            {  
                 _isSpawnable = true;
             }
         }
@@ -50,6 +53,7 @@ namespace SuperBunnyJam
                 if (_tempDealy <= 0)
                 {
                     Instantiate(_bunnyPrefab, transform.position + new Vector3(0, _heightOffset, 0), Quaternion.identity);
+                    _pullBunnyFeedback.PlayFeedbacks();
                     _tempDealy = _spawnDelay;
                     _isSpawnable = false;
                 }

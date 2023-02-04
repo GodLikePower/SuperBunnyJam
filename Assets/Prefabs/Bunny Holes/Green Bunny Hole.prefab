@@ -1,0 +1,92 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &4986720931678001319
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4298690958926677225, guid: e9e4ad304e0d12144bc929af117b18b4,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 0.022211552
+      objectReference: {fileID: 0}
+    - target: {fileID: 4298690958926677225, guid: e9e4ad304e0d12144bc929af117b18b4,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4298690958926677225, guid: e9e4ad304e0d12144bc929af117b18b4,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6557813699256583202, guid: e9e4ad304e0d12144bc929af117b18b4,
+        type: 3}
+      propertyPath: _bunnyPrefab
+      value: 
+      objectReference: {fileID: 7505578270312992474, guid: 8521615b56166f14dbaa654fead67b7a,
+        type: 3}
+    - target: {fileID: 6557813699256583203, guid: e9e4ad304e0d12144bc929af117b18b4,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6557813699256583203, guid: e9e4ad304e0d12144bc929af117b18b4,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6557813699256583203, guid: e9e4ad304e0d12144bc929af117b18b4,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6557813699256583203, guid: e9e4ad304e0d12144bc929af117b18b4,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6557813699256583203, guid: e9e4ad304e0d12144bc929af117b18b4,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6557813699256583203, guid: e9e4ad304e0d12144bc929af117b18b4,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6557813699256583203, guid: e9e4ad304e0d12144bc929af117b18b4,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6557813699256583203, guid: e9e4ad304e0d12144bc929af117b18b4,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6557813699256583203, guid: e9e4ad304e0d12144bc929af117b18b4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6557813699256583203, guid: e9e4ad304e0d12144bc929af117b18b4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6557813699256583203, guid: e9e4ad304e0d12144bc929af117b18b4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6557813699256583207, guid: e9e4ad304e0d12144bc929af117b18b4,
+        type: 3}
+      propertyPath: m_Name
+      value: Green Bunny Hole
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e9e4ad304e0d12144bc929af117b18b4, type: 3}
