@@ -58,6 +58,12 @@ namespace SuperBunnyJam {
 
         /// <summary>Determines width and height of roots</summary>
         public Roll rootTransverseSize;
+        
+        public float shrinkTimeOnHit = 0.4f;
+        /// <remarks>m/s</remarks>
+        public float shrinkRate = 1.5f;
+
+        public float stunTimeAfterShrink = 1f;
 
         public Roll segmentLength;
 
