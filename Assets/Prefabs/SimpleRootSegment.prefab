@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1414796209268688793}
   - component: {fileID: 1414796209268688799}
   - component: {fileID: 1414796209268688792}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: OldVisualization
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 1414796209627022522}
   - component: {fileID: 1414796209627022501}
   - component: {fileID: 1414796209627022503}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SimpleRootSegment
   m_TagString: Untagged
   m_Icon: {fileID: 0}

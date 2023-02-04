@@ -52,7 +52,7 @@ namespace SuperBunnyJam
 
                 if (_tempDealy <= 0)
                 {
-                    Instantiate(_bunnyPrefab, transform.position + new Vector3(0, _heightOffset, 0), Quaternion.identity);
+                    Instantiate(_bunnyPrefab, transform.position + new Vector3(0, _heightOffset, 0), Quaternion.identity).transform.parent = transform;
                     _pullBunnyFeedback.PlayFeedbacks();
                     _tempDealy = _spawnDelay;
                     _isSpawnable = false;
