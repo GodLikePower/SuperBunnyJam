@@ -242,7 +242,7 @@ GameObject:
   - component: {fileID: 5025525083126886116}
   - component: {fileID: 1045088936}
   m_Layer: 3
-  m_Name: Purple Bunny
+  m_Name: Blue Bunny
   m_TagString: Bunny
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1255,10 +1255,60 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1602174426072789852, guid: 2c09be744152f4d46b2fb4006a3ab408,
+        type: 3}
+      propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1602174426072789852, guid: 2c09be744152f4d46b2fb4006a3ab408,
+        type: 3}
+      propertyPath: ShapeModule.angle
+      value: 64.32
+      objectReference: {fileID: 0}
+    - target: {fileID: 1602174426072789852, guid: 2c09be744152f4d46b2fb4006a3ab408,
+        type: 3}
+      propertyPath: VelocityModule.enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1602174426072789852, guid: 2c09be744152f4d46b2fb4006a3ab408,
+        type: 3}
+      propertyPath: ShapeModule.radius.value
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1602174426072789852, guid: 2c09be744152f4d46b2fb4006a3ab408,
+        type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1602174426072789852, guid: 2c09be744152f4d46b2fb4006a3ab408,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 0.74509805
+      objectReference: {fileID: 0}
+    - target: {fileID: 1602174426072789852, guid: 2c09be744152f4d46b2fb4006a3ab408,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 0.043137256
+      objectReference: {fileID: 0}
     - target: {fileID: 5679954412855972210, guid: 2c09be744152f4d46b2fb4006a3ab408,
         type: 3}
       propertyPath: m_Name
       value: Hit Root Effect
+      objectReference: {fileID: 0}
+    - target: {fileID: 8279097324814412817, guid: 2c09be744152f4d46b2fb4006a3ab408,
+        type: 3}
+      propertyPath: m_RenderMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8279097324814412817, guid: 2c09be744152f4d46b2fb4006a3ab408,
+        type: 3}
+      propertyPath: m_LengthScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8279097324814412817, guid: 2c09be744152f4d46b2fb4006a3ab408,
+        type: 3}
+      propertyPath: m_FreeformStretching
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2c09be744152f4d46b2fb4006a3ab408, type: 3}
@@ -1294,7 +1344,7 @@ PrefabInstance:
     - target: {fileID: 2828805732718406907, guid: a492f52b560c0574ca769e87cf8db032,
         type: 3}
       propertyPath: m_Name
-      value: Purple Bunny
+      value: Blue Bunny
       objectReference: {fileID: 0}
     - target: {fileID: 2828805732718406907, guid: a492f52b560c0574ca769e87cf8db032,
         type: 3}
