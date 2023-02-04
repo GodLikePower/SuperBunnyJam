@@ -15,16 +15,13 @@ namespace SuperBunnyJam {
 
         public bool penaltyOnColorMismatch => false;
 
-        public void OnBreak(RootSegment segment) {
-            
+        public void OnBreak(RootSegment segment) {            
         }
 
-        public void OnMismatch(RootSegment segment) {
-            
+        public void OnMismatch(RootSegment segment) {            
         }
 
-        public void OnTooWeak(RootSegment segment) {
-            
+        public void OnTooWeak(RootSegment segment) {            
         }
     }
 }

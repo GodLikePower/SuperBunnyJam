@@ -30,6 +30,17 @@ namespace SuperBunnyJam
 
         public bool penaltyOnColorMismatch => true;
 
+        [SerializeField]
+        FMODUnity.EventReference soundForGrab;
+        [SerializeField]
+        FMODUnity.EventReference soundForRelease;
+        [SerializeField]
+        FMODUnity.EventReference soundForBreakRoot;
+        [SerializeField]
+        FMODUnity.EventReference soundForTooWeak;
+        [SerializeField]
+        FMODUnity.EventReference soundForWrongColor;
+
         private void Start()
         {
             _bunnyRB.isKinematic = true;
@@ -41,27 +52,31 @@ namespace SuperBunnyJam
             base.OnGrab(grabber);
             _bunnyRB.isKinematic = false;
             _bunnyPullFeedback?.PlayFeedbacks();
+
+            this.TryPlaySound(soundForGrab);
         }
 
         public override void OnRelease()
         {
             base.OnRelease();
             Destroy(gameObject, 5);
+
+            this.TryPlaySound(soundForRelease);
         }
 
         public void OnBreak(RootSegment segment)
         {
-            /*throw new System.NotImplementedException();*/
+            this.TryPlaySound(soundForBreakRoot);
         }
 
         public void OnMismatch(RootSegment segment)
         {
-           /* throw new System.NotImplementedException();*/
+            this.TryPlaySound(soundForWrongColor);
         }
 
         public void OnTooWeak(RootSegment segment)
         {
-           /* throw new System.NotImplementedException();*/
+            this.TryPlaySound(soundForTooWeak);
         }
     }
 
