@@ -168,7 +168,7 @@ namespace SuperBunnyJam {
 
         public float growthRate {
             get {
-                if (!isGrowingOrShrinking)
+                if (!isGrowing)
                     return 0f;
 
                 var result = RootManager.instance.baseGrowthRate;
@@ -181,7 +181,7 @@ namespace SuperBunnyJam {
         }
 
         /// <summary>True if segment itself (rather than its successors) is still growing</summary>
-        public bool isGrowingOrShrinking => length < targetLength;
+        public bool isGrowing => length < targetLength;
 
         public float length {
             get => collider.size.z;
@@ -357,8 +357,12 @@ namespace SuperBunnyJam {
                 nubbin = null;
             }
 
+            // Kludge: no shrinking if we have successors
+            if (pendingShrink > 0f && (successors[0] != null || successors[1] != null))
+                pendingShrink = -RootManager.instance.stunTimeAfterShrink;
+
             // Are we growing or shrinking?
-            if (isGrowingOrShrinking) {
+            if (isGrowing || pendingShrink > 0f) {
                 // Yes. So, growing, or shrinking?
                 if (pendingShrink > -RootManager.instance.stunTimeAfterShrink) {
                     // Shrinking. Or just stunned
