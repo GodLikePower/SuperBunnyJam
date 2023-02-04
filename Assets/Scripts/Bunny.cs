@@ -18,6 +18,8 @@ namespace SuperBunnyJam
         float _bunnyForceMoltiplir;
         [SerializeField]
         MMF_Player _bunnyPullFeedback;
+        [SerializeField]
+        MMF_Player _bunnyHitFeedback;
 
         public float collisionForceMultiplier => 1f;
 
@@ -66,6 +68,7 @@ namespace SuperBunnyJam
 
         public void OnBreak(RootSegment segment)
         {
+            _bunnyHitFeedback?.PlayFeedbacks();
             this.TryPlaySound(soundForBreakRoot);
         }
 

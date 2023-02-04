@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &537948635978147701
+--- !u!1 &2997829968104740473
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,8 +8,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7388411275471580641}
-  - component: {fileID: 7375558927367890421}
+  - component: {fileID: 9173306667316195355}
+  - component: {fileID: 3677724450543774305}
   m_Layer: 3
   m_Name: Bunny Pull Feedback
   m_TagString: Untagged
@@ -17,13 +17,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7388411275471580641
+--- !u!4 &9173306667316195355
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 537948635978147701}
+  m_GameObject: {fileID: 2997829968104740473}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -32,13 +32,13 @@ Transform:
   m_Father: {fileID: 7505578270312992475}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7375558927367890421
+--- !u!114 &3677724450543774305
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 537948635978147701}
+  m_GameObject: {fileID: 2997829968104740473}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6da43522623d4704e979466dc7650b65, type: 3}
@@ -187,10 +187,10 @@ MonoBehaviour:
           m_PostInfinity: 2
           m_RotationOrder: 4
         RemapRangeFalloff: {x: 0, y: 1}
-        Owner: {fileID: 7375558927367890421}
+        Owner: {fileID: 3677724450543774305}
         DebugActive: 0
         Mode: 0
-        BoundParticleSystem: {fileID: 3312639478664355040}
+        BoundParticleSystem: {fileID: 9213929969852919205}
         RandomParticleSystems: []
         MoveToPosition: 0
         ActivateOnPlay: 0
@@ -262,8 +262,8 @@ Transform:
   m_Children:
   - {fileID: 7505578270608882738}
   - {fileID: 7332715833337277690}
-  - {fileID: 7388411275471580641}
-  - {fileID: 3312639478664355043}
+  - {fileID: 9173306667316195355}
+  - {fileID: 9213929969852919206}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -283,7 +283,7 @@ MonoBehaviour:
   _bunnyRB: {fileID: 3758403212594924011}
   _bunnyCollider: {fileID: 3419968331840469550}
   _bunnyForceMoltiplir: 10
-  _bunnyPullFeedback: {fileID: 7375558927367890421}
+  _bunnyPullFeedback: {fileID: 3677724450543774305}
   <color>k__BackingField: 0
   soundForGrab:
     Guid:
@@ -328,7 +328,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7505578270312992474}
   serializedVersion: 2
-  m_Mass: 0.2
+  m_Mass: 0.05
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -1160,84 +1160,84 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 4118135731141549129}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &8072566187562350238
+--- !u!1001 &7481096507522049233
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 7505578270312992475}
     m_Modifications:
-    - target: {fileID: 6773229273575778928, guid: 5489a47be08745e4f9490104bc56031c,
-        type: 3}
-      propertyPath: m_Name
-      value: Rocks Particles
-      objectReference: {fileID: 0}
-    - target: {fileID: 6773229273575778941, guid: 5489a47be08745e4f9490104bc56031c,
+    - target: {fileID: 1732836778079734135, guid: 3d59b61dc9c78b14da3f70275ed58870,
         type: 3}
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 6773229273575778941, guid: 5489a47be08745e4f9490104bc56031c,
+    - target: {fileID: 1732836778079734135, guid: 3d59b61dc9c78b14da3f70275ed58870,
         type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6773229273575778941, guid: 5489a47be08745e4f9490104bc56031c,
+    - target: {fileID: 1732836778079734135, guid: 3d59b61dc9c78b14da3f70275ed58870,
         type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6773229273575778941, guid: 5489a47be08745e4f9490104bc56031c,
+    - target: {fileID: 1732836778079734135, guid: 3d59b61dc9c78b14da3f70275ed58870,
         type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6773229273575778941, guid: 5489a47be08745e4f9490104bc56031c,
+    - target: {fileID: 1732836778079734135, guid: 3d59b61dc9c78b14da3f70275ed58870,
         type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.7071068
       objectReference: {fileID: 0}
-    - target: {fileID: 6773229273575778941, guid: 5489a47be08745e4f9490104bc56031c,
+    - target: {fileID: 1732836778079734135, guid: 3d59b61dc9c78b14da3f70275ed58870,
         type: 3}
       propertyPath: m_LocalRotation.x
       value: -0.7071068
       objectReference: {fileID: 0}
-    - target: {fileID: 6773229273575778941, guid: 5489a47be08745e4f9490104bc56031c,
+    - target: {fileID: 1732836778079734135, guid: 3d59b61dc9c78b14da3f70275ed58870,
         type: 3}
       propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6773229273575778941, guid: 5489a47be08745e4f9490104bc56031c,
+    - target: {fileID: 1732836778079734135, guid: 3d59b61dc9c78b14da3f70275ed58870,
         type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6773229273575778941, guid: 5489a47be08745e4f9490104bc56031c,
+    - target: {fileID: 1732836778079734135, guid: 3d59b61dc9c78b14da3f70275ed58870,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: -90
       objectReference: {fileID: 0}
-    - target: {fileID: 6773229273575778941, guid: 5489a47be08745e4f9490104bc56031c,
+    - target: {fileID: 1732836778079734135, guid: 3d59b61dc9c78b14da3f70275ed58870,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6773229273575778941, guid: 5489a47be08745e4f9490104bc56031c,
+    - target: {fileID: 1732836778079734135, guid: 3d59b61dc9c78b14da3f70275ed58870,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1732836778079734138, guid: 3d59b61dc9c78b14da3f70275ed58870,
+        type: 3}
+      propertyPath: m_Name
+      value: Rocks Grab Bunny Particle
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 5489a47be08745e4f9490104bc56031c, type: 3}
---- !u!198 &3312639478664355040 stripped
+  m_SourcePrefab: {fileID: 100100000, guid: 3d59b61dc9c78b14da3f70275ed58870, type: 3}
+--- !u!198 &9213929969852919205 stripped
 ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 6773229273575778942, guid: 5489a47be08745e4f9490104bc56031c,
+  m_CorrespondingSourceObject: {fileID: 1732836778079734132, guid: 3d59b61dc9c78b14da3f70275ed58870,
     type: 3}
-  m_PrefabInstance: {fileID: 8072566187562350238}
+  m_PrefabInstance: {fileID: 7481096507522049233}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &3312639478664355043 stripped
+--- !u!4 &9213929969852919206 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 6773229273575778941, guid: 5489a47be08745e4f9490104bc56031c,
+  m_CorrespondingSourceObject: {fileID: 1732836778079734135, guid: 3d59b61dc9c78b14da3f70275ed58870,
     type: 3}
-  m_PrefabInstance: {fileID: 8072566187562350238}
+  m_PrefabInstance: {fileID: 7481096507522049233}
   m_PrefabAsset: {fileID: 0}
